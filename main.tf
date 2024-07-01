@@ -5,6 +5,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "australiaeast"  # Replace with your desired Azure region
+  name     = var.resource_group_name
+  location = var.location
 }
