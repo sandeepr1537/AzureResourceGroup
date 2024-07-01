@@ -9,7 +9,8 @@ Open Azure Cloud Shell or your local terminal.
 Run the following command to create a service principal and save the output:
 
   az ad sp create-for-rbac --name "my-service-principal" --role Contributor --scopes /subscriptions/YOUR_SUBSCRIPTION_ID --sdk-auth
-Replace YOUR_SUBSCRIPTION_ID with your Azure subscription ID. This command will output a JSON object containing the credentials needed.
+
+  Replace YOUR_SUBSCRIPTION_ID with your Azure subscription ID. This command will output a JSON object containing the credentials needed.
 
 b. Add Credentials to GitHub Secrets
 Go to your GitHub repository.
