@@ -26,12 +26,16 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
+   
 
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -var-file="terraform.tfvars"
+      
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var-file="terraform.tfvars"
+     
 
     - name: Terraform Show Outputs
       run: terraform show -json
+      
