@@ -7,6 +7,7 @@ To run Terraform with Azure, you'll need to provide credentials for authenticati
 a. Create Azure Service Principal
 Open Azure Cloud Shell or your local terminal.
 Run the following command to create a service principal and save the output:
+
   az ad sp create-for-rbac --name "my-service-principal" --role Contributor --scopes /subscriptions/YOUR_SUBSCRIPTION_ID --sdk-auth
 Replace YOUR_SUBSCRIPTION_ID with your Azure subscription ID. This command will output a JSON object containing the credentials needed.
 
