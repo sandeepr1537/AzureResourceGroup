@@ -29,13 +29,13 @@ jobs:
    
 
     - name: Terraform Plan
-      run: terraform plan -var-file="variables.tfvars"
+      run: terraform plan 
       
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file="variables.tfvars"
+      run: terraform apply 
      
 
-    - name: Terraform Show Outputs
-      run: terraform show -json
+    #- name: Terraform Show Outputs
+     # run: terraform show -json
       
