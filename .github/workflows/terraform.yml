@@ -1,6 +1,5 @@
-# terraform.yml
-
-name: Terraform Azure Deployment
+# .github/workflows/deploy.yml
+name: Deploy to Azure
 
 on:
   push:
@@ -8,34 +7,28 @@ on:
       - main
 
 jobs:
-  terraform:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.0.11  # Replace with your desired Terraform version
-
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        terraform_version: 1.4.6  # Specify the Terraform version you want to use
 
     - name: Terraform Init
       run: terraform init
-   
 
     - name: Terraform Plan
-      run: terraform plan 
-      
+      run: terraform plan
 
     - name: Terraform Apply
-      run: terraform apply 
-     
-
-    #- name: Terraform Show Outputs
-     # run: terraform show -json
-      
+      run: terraform apply -auto-approve
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
