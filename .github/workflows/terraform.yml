@@ -1,41 +1,40 @@
-name: Deploy to Azure
+name: Terraform Deploy
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your default branch if necessary
+  pull_request:
+    branches:
+      - main  # Change this to your default branch if necessary
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-        az --version
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2.0.0
+        with:
+          terraform_version: 1.4.0  # Use the version of Terraform you need
 
-    - name: Debug Azure Secrets
-      run: |
-        echo "CLIENT_ID: ${{ secrets.CLIENT_ID }}" # Do NOT print sensitive values in production
-        echo "TENANT_ID: ${{ secrets.TENANT_ID }}" # Do NOT print sensitive values in production
+      - name: Terraform Init
+        run: terraform init
 
-    - name: Login to Azure
-      run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+      - name: Terraform Validate
+        run: terraform validate
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.4.6  # Specify the Terraform version you want to use
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan
 
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Terraform Plan
-      run: terraform plan -var-file="variables.tfvars"
-
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file="variables.tfvars"
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+          TENANT_ID: ${{ secrets.TENANT_ID }}
