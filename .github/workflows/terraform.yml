@@ -18,6 +18,11 @@ jobs:
         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
         az --version
 
+    - name: Debug Azure Secrets
+      run: |
+        echo "CLIENT_ID: ${{ secrets.CLIENT_ID }}" # Do NOT print sensitive values in production
+        echo "TENANT_ID: ${{ secrets.TENANT_ID }}" # Do NOT print sensitive values in production
+
     - name: Login to Azure
       run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
 
